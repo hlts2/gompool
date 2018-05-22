@@ -7,11 +7,11 @@ import (
 
 var (
 
-	// ErrPoolEmpty represents error that pool dose not exist
-	ErrPoolEmpty = errors.New("pool is empty")
+	// ErrStackEmpty represents error that stack is empty
+	ErrStackEmpty = errors.New("stack is empty")
 
-	// ErrPoolFull represents error that pool is full
-	ErrPoolFull = errors.New("pool is full")
+	// ErrStackFull represents error that stack is full
+	ErrStackFull = errors.New("stack is full")
 )
 
 // Stack is treiber stack
@@ -60,7 +60,7 @@ func (s *Stack) Pop() (interface{}, error) {
 	defer s.mu.Unlock()
 
 	if s.head == nil {
-		return nil, ErrPoolEmpty
+		return nil, ErrStackEmpty
 	}
 
 	tmpHead := s.head
