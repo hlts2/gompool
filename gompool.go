@@ -31,7 +31,7 @@ func (g *Gompool) IsEmpty() bool {
 	return g.stack.IsEmpty()
 }
 
-// DestPool destroy all items of pool
+// DestPool destroys all values of pool
 func (g *Gompool) DestPool() {
 	for !g.stack.IsEmpty() {
 		g.stack.Pop()
