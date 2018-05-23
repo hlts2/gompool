@@ -17,7 +17,7 @@ func NewGompool(uSize uint) *Gompool {
 	stack := treiber.NewStack()
 
 	for i := 0; i < iSize; i++ {
-		stack.Push(new(treiber.Node))
+		stack.Push(nil)
 	}
 
 	return &Gompool{
@@ -27,7 +27,7 @@ func NewGompool(uSize uint) *Gompool {
 
 // AddMem adds the pool
 func (g *Gompool) AddMem() {
-	g.stack.Push(new(treiber.Node))
+	g.stack.Push(nil)
 }
 
 // GetMem takes out of the pool
@@ -38,6 +38,11 @@ func (g *Gompool) GetMem() (*interface{}, error) {
 	}
 
 	return ptr, nil
+}
+
+// FreeMem puts batck memory to pool
+func (g *Gompool) FreeMem(ptr *interface{}) {
+	g.stack.Push(ptr)
 }
 
 // IsEmpty returns true if the pool is empty, one the other hand, it returns false if it is not empty
