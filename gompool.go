@@ -10,27 +10,38 @@ type Gompool struct {
 }
 
 // NewGompool returns Gompool instance
-func NewGompool() *Gompool {
+func NewGompool(uSize uint) *Gompool {
+	iSize := int(uSize)
+
+	stack := treiber.NewStack()
+
+	for i := 0; i < iSize; i++ {
+		stack.Push(new(treiber.Node))
+	}
+
 	return &Gompool{
-		stack: treiber.NewStack(),
+		stack: stack,
 	}
 }
 
-// AddMem appends value into the pool
-func (g *Gompool) AddMem() error {
-	return nil
+// AddMem adds the pool
+func (g *Gompool) AddMem() {
+	g.stack.Push(new(treiber.Node))
 }
 
-// GetMem takes out of value from the pool
-func (g *Gompool) GetMem() interface{} {
-	return nil
+// GetMem takes out of the pool
+func (g *Gompool) GetMem() (interface{}, error) {
+	return g.stack.Pop()
 }
 
 // IsEmpty returns true if the pool is empty, one the other hand, it returns false if it is not empty
 func (g *Gompool) IsEmpty() bool {
-	return false
+	return g.stack.IsEmpty()
 }
 
-// DestPool destroys all values of pool
+// DestPool destroys all pools
 func (g *Gompool) DestPool() {
+	for !g.stack.IsEmpty() {
+		g.stack.Pop()
+	}
 }
