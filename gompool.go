@@ -2,6 +2,7 @@ package gompool
 
 import (
 	"github.com/hlts2/gompool/treiber"
+	"github.com/pkg/errors"
 )
 
 // Gompool is base gompool structor
@@ -30,8 +31,13 @@ func (g *Gompool) AddMem() {
 }
 
 // GetMem takes out of the pool
-func (g *Gompool) GetMem() (interface{}, error) {
-	return g.stack.Pop()
+func (g *Gompool) GetMem() (*interface{}, error) {
+	ptr, err := g.stack.Pop()
+	if err != nil {
+		return nil, errors.Wrap(err, "faild to get memory from pool")
+	}
+
+	return ptr, nil
 }
 
 // IsEmpty returns true if the pool is empty, one the other hand, it returns false if it is not empty
