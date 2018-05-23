@@ -55,7 +55,7 @@ func (s *Stack) Push(value interface{}) error {
 }
 
 // Pop returns item of the stack
-func (s *Stack) Pop() (interface{}, error) {
+func (s *Stack) Pop() (*interface{}, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -64,10 +64,9 @@ func (s *Stack) Pop() (interface{}, error) {
 	}
 
 	tmpHead := s.head
-	value := tmpHead.value
 	s.head = tmpHead.next
 
-	return value, nil
+	return &tmpHead.value, nil
 }
 
 // IsEmpty returns true if the stack is empty, one the other hand, it returns false if it is not empty
