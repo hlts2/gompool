@@ -42,8 +42,8 @@ func (g *Gompool) GetMem() (interface{}, error) {
 }
 
 // FreeMem puts batck memory to pool
-func (g *Gompool) FreeMem(ptr interface{}) {
-	g.stack.Push(ptr)
+func (g *Gompool) FreeMem(value interface{}) {
+	g.stack.Push(value)
 }
 
 // IsEmpty returns true if the pool is empty, one the other hand, it returns false if it is not empty
