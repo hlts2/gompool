@@ -7,17 +7,18 @@ import (
 
 // Gompool is base gompool structor
 type Gompool struct {
+	fn    func() interface{}
 	stack *treiber.Stack
 }
 
 // NewGompool returns Gompool instance
-func NewGompool(uSize uint) *Gompool {
+func NewGompool(uSize uint, fn func() interface{}) *Gompool {
 	iSize := int(uSize)
 
 	stack := treiber.NewStack()
 
 	for i := 0; i < iSize; i++ {
-		stack.Push(nil)
+		stack.Push(fn())
 	}
 
 	return &Gompool{
@@ -27,21 +28,21 @@ func NewGompool(uSize uint) *Gompool {
 
 // AddMem adds the pool
 func (g *Gompool) AddMem() {
-	g.stack.Push(nil)
+	g.stack.Push(g.fn())
 }
 
 // GetMem takes out of the pool
-func (g *Gompool) GetMem() (*interface{}, error) {
-	ptr, err := g.stack.Pop()
+func (g *Gompool) GetMem() (interface{}, error) {
+	value, err := g.stack.Pop()
 	if err != nil {
 		return nil, errors.Wrap(err, "faild to get memory from pool")
 	}
 
-	return ptr, nil
+	return value, nil
 }
 
 // FreeMem puts batck memory to pool
-func (g *Gompool) FreeMem(ptr *interface{}) {
+func (g *Gompool) FreeMem(ptr interface{}) {
 	g.stack.Push(ptr)
 }
 

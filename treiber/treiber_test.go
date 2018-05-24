@@ -11,17 +11,13 @@ func TestStackOperation(t *testing.T) {
 	stack.Push(2)
 	stack.Push(3)
 
-	ptr, err := stack.Pop()
+	value, err := stack.Pop()
 	if err != nil {
-		t.Errorf("Pop() error: %v", ptr)
+		t.Errorf("Pop() error: %v", err)
 	}
 
-	if ptr == nil {
-		t.Error("Pop() ptr is nil")
-	}
-
-	if *ptr != 3 {
-		t.Errorf("Pop() *ptr expected: %v, got: %v", 3, *ptr)
+	if value != 3 {
+		t.Errorf("Pop() value expected: %v, got: %v", 3, value)
 	}
 
 	stack.Pop()
@@ -33,25 +29,21 @@ func TestStackOperation(t *testing.T) {
 
 	stack.Push(4)
 
-	ptr, err = stack.Pop()
+	value, err = stack.Pop()
 	if err != nil {
 		t.Errorf("Pop() error: %v", err)
 	}
 
-	if ptr == nil {
-		t.Error("Pop() ptr is nil")
+	if value != 4 {
+		t.Errorf("Pop() value expected: %v, got: %v", 4, value)
 	}
 
-	if *ptr != 4 {
-		t.Errorf("Pop() *ptr expected: %v, got: %v", 4, *ptr)
-	}
-
-	ptr, err = stack.Pop()
+	value, err = stack.Pop()
 	if err == nil {
 		t.Error("Pop() error is nil")
 	}
 
-	if ptr != nil {
-		t.Error("Pop() ptr is not nil")
+	if value != nil {
+		t.Errorf("Pop() value expected: nil, got: %v", value)
 	}
 }
