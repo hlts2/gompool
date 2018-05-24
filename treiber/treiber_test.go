@@ -7,17 +7,21 @@ import (
 func TestStackOperation(t *testing.T) {
 	stack := NewStack()
 
-	stack.Push(1)
-	stack.Push(2)
-	stack.Push(3)
+	stack.Push(NewNode(1))
+	stack.Push(NewNode(2))
+	stack.Push(NewNode(3))
 
-	value, err := stack.Pop()
+	node, err := stack.Pop()
 	if err != nil {
 		t.Errorf("Pop() error: %v", err)
 	}
 
-	if value != 3 {
-		t.Errorf("Pop() value expected: %v, got: %v", 3, value)
+	if node == nil {
+		t.Error("Pop() node is nil")
+	}
+
+	if node.Value != 3 {
+		t.Errorf("Pop() node.value expected: %v, got: %v", 3, node.Value)
 	}
 
 	stack.Pop()
@@ -27,23 +31,27 @@ func TestStackOperation(t *testing.T) {
 		t.Errorf("IsEmpty() expected: %v, got: %v", true, stack.IsEmpty())
 	}
 
-	stack.Push(4)
+	stack.Push(NewNode(4))
 
-	value, err = stack.Pop()
+	node, err = stack.Pop()
 	if err != nil {
 		t.Errorf("Pop() error: %v", err)
 	}
 
-	if value != 4 {
-		t.Errorf("Pop() value expected: %v, got: %v", 4, value)
+	if node == nil {
+		t.Error("Pop() node is nil")
 	}
 
-	value, err = stack.Pop()
+	if node.Value != 4 {
+		t.Errorf("Pop() node.Value expected: %v, got: %v", 4, node.Value)
+	}
+
+	node, err = stack.Pop()
 	if err == nil {
 		t.Error("Pop() error is nil")
 	}
 
-	if value != nil {
-		t.Errorf("Pop() value expected: nil, got: %v", value)
+	if node != nil {
+		t.Errorf("Pop() node expected: nil, got: %v", node)
 	}
 }

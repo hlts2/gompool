@@ -31,17 +31,20 @@ func NewStack() *Stack {
 // Node is the item of stack
 type Node struct {
 	next  *Node
-	value interface{}
+	Value interface{}
+}
+
+// NewNode returns Node instance
+func NewNode(value interface{}) *Node {
+	return &Node{
+		Value: value,
+	}
 }
 
 // Push appends value into the stack
-func (s *Stack) Push(value interface{}) error {
+func (s *Stack) Push(newHead *Node) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-
-	newHead := &Node{
-		value: value,
-	}
 
 	if s.head == nil {
 		newHead.next = nil
@@ -54,8 +57,8 @@ func (s *Stack) Push(value interface{}) error {
 	return nil
 }
 
-// Pop returns item of the stack
-func (s *Stack) Pop() (interface{}, error) {
+// Pop returns node of the stack
+func (s *Stack) Pop() (*Node, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -66,7 +69,7 @@ func (s *Stack) Pop() (interface{}, error) {
 	tmpHead := s.head
 	s.head = tmpHead.next
 
-	return tmpHead.value, nil
+	return tmpHead, nil
 }
 
 // IsEmpty returns true if the stack is empty, one the other hand, it returns false if it is not empty
