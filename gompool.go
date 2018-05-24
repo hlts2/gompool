@@ -26,13 +26,13 @@ func NewGompool(uSize uint, fn func() interface{}) *Gompool {
 	}
 }
 
-// AddMem adds the pool
-func (g *Gompool) AddMem() {
+// Add adds the pool
+func (g *Gompool) Add() {
 	g.stack.Push(treiber.NewNode(g.fn()))
 }
 
-// GetMem takes out of the pool
-func (g *Gompool) GetMem() (*treiber.Node, error) {
+// Get takes out of the pool
+func (g *Gompool) Get() (*treiber.Node, error) {
 	node, err := g.stack.Pop()
 	if err != nil {
 		return nil, errors.Wrap(err, "faild to get memory from pool")
@@ -41,8 +41,8 @@ func (g *Gompool) GetMem() (*treiber.Node, error) {
 	return node, nil
 }
 
-// FreeMem puts batck memory to pool
-func (g *Gompool) FreeMem(node *treiber.Node) {
+// Put puts batck memory to pool
+func (g *Gompool) Put(node *treiber.Node) {
 	g.stack.Push(node)
 }
 
