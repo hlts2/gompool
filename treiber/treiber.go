@@ -42,9 +42,8 @@ func NewNode(value interface{}) *Node {
 }
 
 // Push appends value into the stack
-func (s *Stack) Push(newHead *Node) error {
+func (s *Stack) Push(newHead *Node) {
 	s.mu.Lock()
-	defer s.mu.Unlock()
 
 	if s.head == nil {
 		newHead.next = nil
@@ -54,13 +53,12 @@ func (s *Stack) Push(newHead *Node) error {
 
 	s.head = newHead
 
-	return nil
+	s.mu.Unlock()
 }
 
 // Pop returns node of the stack
 func (s *Stack) Pop() (*Node, error) {
 	s.mu.Lock()
-	defer s.mu.Unlock()
 
 	if s.head == nil {
 		return nil, ErrStackEmpty
@@ -69,13 +67,12 @@ func (s *Stack) Pop() (*Node, error) {
 	tmpHead := s.head
 	s.head = tmpHead.next
 
+	s.mu.Unlock()
+
 	return tmpHead, nil
 }
 
 // IsEmpty returns true if the stack is empty, one the other hand, it returns false if it is not empty
 func (s *Stack) IsEmpty() bool {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
 	return s.head == nil
 }
