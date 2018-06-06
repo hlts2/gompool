@@ -9,9 +9,6 @@ var (
 
 	// ErrStackEmpty represents error that stack is empty
 	ErrStackEmpty = errors.New("stack is empty")
-
-	// ErrStackFull represents error that stack is full
-	ErrStackFull = errors.New("stack is full")
 )
 
 // Stack is treiber stack
@@ -69,7 +66,7 @@ func (s *Stack) Pop() (*Node, error) {
 
 	s.mu.Unlock()
 
-	return tmpHead, nil
+	return s.head, nil
 }
 
 // IsEmpty returns true if the stack is empty, one the other hand, it returns false if it is not empty
