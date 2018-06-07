@@ -3,7 +3,6 @@ package treiber
 import (
 	"errors"
 	"sync/atomic"
-	"unsafe"
 )
 
 var (
@@ -15,12 +14,14 @@ var (
 // Stack is treiber stack
 type Stack struct {
 	head *Node
+	hasp int32
 }
 
 // NewStack returns stack instance
 func NewStack() *Stack {
 	return &Stack{
 		head: nil,
+		hasp: 0,
 	}
 }
 
@@ -39,33 +40,67 @@ func NewNode(value interface{}) *Node {
 
 // Push appends value into the stack
 func (s *Stack) Push(newHead *Node) {
-	atomic.StorePointer((*unsafe.Pointer)(unsafe.Pointer(&newHead.next)), unsafe.Pointer(s.head))
-	atomic.StorePointer((*unsafe.Pointer)(unsafe.Pointer(&s.head)), unsafe.Pointer(newHead))
+	for {
+		if s.hasp == 0 && atomic.CompareAndSwapInt32(&s.hasp, 0, 1) {
+			break
+		}
+	}
+
+	newHead.next = s.head
+	s.head = newHead
+
+	s.hasp = 0
 }
 
 // Pop returns node of the stack
 func (s *Stack) Pop() (*Node, error) {
-	tmpHead := (*Node)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&s.head))))
-	if tmpHead == nil {
+	for {
+		if s.hasp == 0 && atomic.CompareAndSwapInt32(&s.hasp, 0, 1) {
+			break
+		}
+	}
+
+	if s.head == nil {
+		s.hasp = 0
 		return nil, ErrStackEmpty
 	}
 
-	atomic.StorePointer((*unsafe.Pointer)(unsafe.Pointer(&s.head)), unsafe.Pointer(tmpHead.next))
+	tmpHead := s.head
+	s.head = tmpHead.next
+
+	s.hasp = 0
 
 	return tmpHead, nil
 }
 
 // IsEmpty returns true if the stack is empty, one the other hand, it returns false if it is not empty
 func (s *Stack) IsEmpty() bool {
-	return atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&s.head))) == nil
+	for {
+		if s.hasp == 0 && atomic.CompareAndSwapInt32(&s.hasp, 0, 1) {
+			break
+		}
+	}
+
+	s.hasp = 0
+
+	return s.head == nil
 }
 
 // Cap returns current capacity of stack
 func (s *Stack) Cap() (cnt int) {
-	tmpHead := (*Node)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&s.head))))
+	for {
+		if s.hasp == 0 && atomic.CompareAndSwapInt32(&s.hasp, 0, 1) {
+			break
+		}
+	}
+
+	tmpHead := s.head
 	for tmpHead != nil {
 		cnt++
 		tmpHead = tmpHead.next
 	}
+
+	s.hasp = 0
+
 	return cnt
 }
