@@ -2,7 +2,8 @@ package treiber
 
 import (
 	"errors"
-	"sync"
+	"sync/atomic"
+	"unsafe"
 )
 
 var (
@@ -14,14 +15,12 @@ var (
 // Stack is treiber stack
 type Stack struct {
 	head *Node
-	mu   *sync.Mutex
 }
 
 // NewStack returns stack instance
 func NewStack() *Stack {
 	return &Stack{
 		head: nil,
-		mu:   new(sync.Mutex),
 	}
 }
 
@@ -40,45 +39,31 @@ func NewNode(value interface{}) *Node {
 
 // Push appends value into the stack
 func (s *Stack) Push(newHead *Node) {
-	s.mu.Lock()
-
-	if s.head == nil {
-		newHead.next = nil
-	} else {
-		newHead.next = s.head
-	}
-
-	s.head = newHead
-
-	s.mu.Unlock()
+	atomic.StorePointer((*unsafe.Pointer)(unsafe.Pointer(&newHead.next)), unsafe.Pointer(s.head))
+	atomic.StorePointer((*unsafe.Pointer)(unsafe.Pointer(&s.head)), unsafe.Pointer(newHead))
 }
 
 // Pop returns node of the stack
 func (s *Stack) Pop() (*Node, error) {
-	s.mu.Lock()
-
-	if s.head == nil {
+	tmpHead := (*Node)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&s.head))))
+	if tmpHead == nil {
 		return nil, ErrStackEmpty
 	}
 
-	tmpHead := s.head
-	s.head = tmpHead.next
-
-	s.mu.Unlock()
+	atomic.StorePointer((*unsafe.Pointer)(unsafe.Pointer(&s.head)), unsafe.Pointer(tmpHead.next))
 
 	return tmpHead, nil
 }
 
 // IsEmpty returns true if the stack is empty, one the other hand, it returns false if it is not empty
 func (s *Stack) IsEmpty() bool {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	return s.head == nil
+	return atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&s.head))) == nil
 }
 
 // Cap returns current capacity of stack
 func (s *Stack) Cap() (cnt int) {
+	// TODO use aatomic
+
 	tmpHead := s.head
 	for tmpHead != nil {
 		cnt++
