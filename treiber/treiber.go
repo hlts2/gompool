@@ -62,9 +62,7 @@ func (s *Stack) IsEmpty() bool {
 
 // Cap returns current capacity of stack
 func (s *Stack) Cap() (cnt int) {
-	// TODO use aatomic
-
-	tmpHead := s.head
+	tmpHead := (*Node)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&s.head))))
 	for tmpHead != nil {
 		cnt++
 		tmpHead = tmpHead.next
