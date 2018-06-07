@@ -23,6 +23,7 @@ func NewGompool(uSize uint, fn func() interface{}) *Gompool {
 
 	return &Gompool{
 		stack: stack,
+		fn:    fn,
 	}
 }
 
