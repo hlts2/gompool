@@ -66,7 +66,7 @@ func (s *Stack) Pop() (*Node, error) {
 
 	s.mu.Unlock()
 
-	return s.head, nil
+	return tmpHead, nil
 }
 
 // IsEmpty returns true if the stack is empty, one the other hand, it returns false if it is not empty
