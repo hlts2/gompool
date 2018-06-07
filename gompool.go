@@ -51,6 +51,11 @@ func (g *Gompool) IsEmpty() bool {
 	return g.stack.IsEmpty()
 }
 
+// Cap returns current capacity of pool
+func (g *Gompool) Cap() int {
+	return g.stack.Cap()
+}
+
 // DestPool destroys all pools
 func (g *Gompool) DestPool() {
 	for !g.stack.IsEmpty() {

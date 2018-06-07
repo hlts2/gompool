@@ -76,3 +76,13 @@ func (s *Stack) IsEmpty() bool {
 
 	return s.head == nil
 }
+
+// Cap returns current capacity of stack
+func (s *Stack) Cap() (cnt int) {
+	tmpHead := s.head
+	for tmpHead != nil {
+		cnt++
+		tmpHead = tmpHead.next
+	}
+	return cnt
+}
