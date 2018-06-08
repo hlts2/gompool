@@ -1,6 +1,6 @@
 # gompool
 
-gompool is a simple memory pool library in golang using triber stack
+gompool is a simple lock-free memory pool library in golang using triber stack
 
 ## Requirement
 
