@@ -13,3 +13,24 @@ go get github.com/hlts2/gompool
 ```
 
 ## Example
+
+```go
+
+// Create 10 pools of `*bytes.Buffer`
+pools := gompool.NewGompool(10, func() interface{} {
+    return new(bytes.Buffer)
+})
+
+pool1, _ := pools.Get()
+pool2, _ := pools.Get()
+
+buf1 := pool.Value.(*bytes.Buffer)
+buf1.WriteString("Hello world1")
+
+buf2 := pool2.Value.(*bytes.Buffer)
+buf2.WriteString("Hello world2")
+
+pools.Put(pool1)    // Return pool1 to pools
+pools.Put(pool2)    // Return pool2 to pools
+
+```
