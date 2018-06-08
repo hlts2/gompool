@@ -20,7 +20,7 @@ go get github.com/hlts2/gompool
 
 // Create 10 pools of `*bytes.Buffer`
 pools := gompool.NewGompool(10, func() interface{} {
-    return new(bytes.Buffer)
+    return &bytes.Buffer{}
 })
 
 pool1, _ := pools.Get()
