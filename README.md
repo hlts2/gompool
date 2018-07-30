@@ -10,7 +10,7 @@ gompool is a simple lock-free memory pool library in golang using [`treiber stac
 
 ## Installation
 
-```go
+```shell
 go get github.com/hlts2/gompool
 ```
 
