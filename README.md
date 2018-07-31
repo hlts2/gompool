@@ -36,3 +36,9 @@ pools.Put(pool1)    // Return pool1 to pools
 pools.Put(pool2)    // Return pool2 to pools
 
 ```
+
+## Author
+[hlts2](https://github.com/hlts2)
+
+## LICENSE
+lock-free released under MIT license, refer [LICENSE](https://github.com/hlts2/lock-free/blob/master/LICENSE) file.
