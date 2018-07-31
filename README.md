@@ -41,4 +41,4 @@ pools.Put(pool2)    // Return pool2 to pools
 [hlts2](https://github.com/hlts2)
 
 ## LICENSE
-lock-free released under MIT license, refer [LICENSE](https://github.com/hlts2/lock-free/blob/master/LICENSE) file.
+lock-free released under MIT license, refer [LICENSE](https://github.com/hlts2/gompool/blob/master/LICENSE) file.
