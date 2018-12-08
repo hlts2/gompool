@@ -27,7 +27,7 @@ func TestGetAndPut(t *testing.T) {
 	for i := 0; i < int(poolSize); i++ {
 		n := pool.Get()
 		if n == nil {
-			t.Errorf("Get n is nil")
+			t.Errorf("Get is nil")
 		}
 
 		poolNodes = append(poolNodes, n)
