@@ -23,8 +23,8 @@ pools := gompool.NewGompool(10, func() interface{} {
     return &bytes.Buffer{}
 })
 
-pool1, _ := pools.Get()
-pool2, _ := pools.Get()
+pool1 := pools.Get()
+pool2 := pools.Get()
 
 buf1 := pool1.Value.(*bytes.Buffer)
 buf1.WriteString("Hello world1")
