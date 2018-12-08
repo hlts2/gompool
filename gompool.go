@@ -33,6 +33,7 @@ func (g *Gompool) Get() *treiber.Node {
 		node, err := g.stack.Pop()
 		if err != nil {
 			g.upscale()
+			continue
 		}
 		return node
 	}
