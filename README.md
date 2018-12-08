@@ -62,4 +62,4 @@ ok  	github.com/hlts2/gompool	15.530s
 [hlts2](https://github.com/hlts2)
 
 ## LICENSE
-lock-free released under MIT license, refer [LICENSE](https://github.com/hlts2/gompool/blob/master/LICENSE) file.
+gompool released under MIT license, refer [LICENSE](https://github.com/hlts2/gompool/blob/master/LICENSE) file.
