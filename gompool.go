@@ -2,13 +2,13 @@ package gompool
 
 import (
 	"github.com/hlts2/gompool/treiber"
-	"github.com/pkg/errors"
 )
 
 // Gompool is base gompool structor
 type Gompool struct {
-	fn    func() interface{}
-	stack *treiber.Stack
+	fn          func() interface{}
+	stack       *treiber.Stack
+	initialSize int
 }
 
 // NewGompool returns Gompool instance
@@ -27,29 +27,27 @@ func NewGompool(uSize uint, fn func() interface{}) *Gompool {
 	}
 }
 
-// Add adds the pool
-func (g *Gompool) Add() {
-	g.stack.Push(treiber.NewNode(g.fn()))
+// Get takes out of the pool
+func (g *Gompool) Get() *treiber.Node {
+	for {
+		node, err := g.stack.Pop()
+		if err != nil {
+			g.upscale()
+			continue
+		}
+		return node
+	}
 }
 
-// Get takes out of the pool
-func (g *Gompool) Get() (*treiber.Node, error) {
-	node, err := g.stack.Pop()
-	if err != nil {
-		return nil, errors.Wrap(err, "faild to get memory from pool")
+func (g *Gompool) upscale() {
+	for i := 0; i < g.initialSize; i++ {
+		g.stack.Push(treiber.NewNode(g.fn()))
 	}
-
-	return node, nil
 }
 
 // Put puts batck memory to pool
 func (g *Gompool) Put(node *treiber.Node) {
 	g.stack.Push(node)
-}
-
-// IsEmpty returns true if the pool is empty, one the other hand, it returns false if it is not empty
-func (g *Gompool) IsEmpty() bool {
-	return g.stack.IsEmpty()
 }
 
 // Cap returns current capacity of pool
