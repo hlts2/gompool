@@ -14,10 +14,10 @@ func BenchmarkGompool(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		pool1, _ := pools.Get()
+		pool1 := pools.Get()
 		_ = pool1.Value.(*bytes.Buffer)
 
-		pool2, _ := pools.Get()
+		pool2 := pools.Get()
 		_ = pool2.Value.(*bytes.Buffer)
 
 		pools.Put(pool1)

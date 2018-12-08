@@ -25,9 +25,9 @@ func TestGetAndPut(t *testing.T) {
 	poolNodes := make([]*treiber.Node, 0, int(poolSize))
 
 	for i := 0; i < int(poolSize); i++ {
-		n, err := pool.Get()
-		if err != nil {
-			t.Errorf("Get is error: %v", err)
+		n := pool.Get()
+		if n == nil {
+			t.Errorf("Get n is nil")
 		}
 
 		poolNodes = append(poolNodes, n)
@@ -65,39 +65,12 @@ func TestCap(t *testing.T) {
 		t.Errorf("Cap expected: %v, got: %v", poolSize, got)
 	}
 
-	_, _ = pool.Get()
+	_ = pool.Get()
 
 	got = pool.Cap()
 
 	if got != int(poolSize)-1 {
 		t.Errorf("Cap expected: %v, got: %v", int(poolSize)-1, got)
-	}
-}
-
-func TestIsEmpty(t *testing.T) {
-	var poolSize uint = 4
-
-	pool := NewGompool(poolSize, func() interface{} {
-		return new(int)
-	})
-
-	expected := false
-	got := pool.IsEmpty()
-
-	if expected != got {
-		t.Errorf("IsEmpty expected: %v, got: %v", expected, got)
-	}
-
-	_, _ = pool.Get()
-	_, _ = pool.Get()
-	_, _ = pool.Get()
-	_, _ = pool.Get()
-
-	expected = true
-	got = pool.IsEmpty()
-
-	if expected != got {
-		t.Errorf("IsEmpty expected: %v, got: %v", expected, got)
 	}
 }
 
