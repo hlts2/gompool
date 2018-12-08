@@ -38,7 +38,7 @@ pools.Put(pool2)    // Return pool2 to pools
 ```
 
 ## Benchmark
-[gompool](https://github.com/hlts2/gompool) vs [sync.Pool](https://github.com/golang/go/tree/master/src/sync)
+[gompool](https://github.com/hlts2/gompool) vs [sync.Pool](https://github.com/golang/go/tree/master/src/sync)(Standard library)
 
 ```
 goos: darwin
