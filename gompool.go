@@ -7,8 +7,9 @@ import (
 
 // Gompool is base gompool structor
 type Gompool struct {
-	fn    func() interface{}
-	stack *treiber.Stack
+	fn          func() interface{}
+	stack       *treiber.Stack
+	initialSize int
 }
 
 // NewGompool returns Gompool instance
@@ -25,11 +26,6 @@ func NewGompool(uSize uint, fn func() interface{}) *Gompool {
 		stack: stack,
 		fn:    fn,
 	}
-}
-
-// Add adds the pool
-func (g *Gompool) Add() {
-	g.stack.Push(treiber.NewNode(g.fn()))
 }
 
 // Get takes out of the pool

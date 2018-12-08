@@ -52,23 +52,6 @@ func TestGetAndPut(t *testing.T) {
 	}
 }
 
-func TestAdd(t *testing.T) {
-	var poolSize uint = 40
-
-	pool := NewGompool(poolSize, func() interface{} {
-		return make([]string, 10)
-	})
-
-	pool.Add()
-
-	expected := int(poolSize) + 1
-	got := pool.Cap()
-
-	if expected != got {
-		t.Errorf("Cap expected: %v, got: %v", expected, got)
-	}
-}
-
 func TestCap(t *testing.T) {
 	var poolSize uint = 10
 
