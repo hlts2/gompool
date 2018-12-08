@@ -45,7 +45,7 @@ func (g *Gompool) upscale() {
 	}
 }
 
-// Put puts batck memory to pool
+// Put puts node to pool
 func (g *Gompool) Put(node *treiber.Node) {
 	g.stack.Push(node)
 }
