@@ -1,6 +1,6 @@
 # gompool
 
-gompool is a simple lock-free memory pool library written in golang using [`treiber stack`][treiber stack]
+gompool is a simple allocation-free and lock-free memory pool library written in golang using [`treiber stack`][treiber stack]
 
 [treiber stack]: https://en.wikipedia.org/wiki/Treiber_Stack
 
